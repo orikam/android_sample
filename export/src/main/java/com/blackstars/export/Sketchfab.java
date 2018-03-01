@@ -1,14 +1,20 @@
 package com.blackstars.export;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
+import android.widget.ProgressBar;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
@@ -44,6 +50,9 @@ public class Sketchfab extends Activity {
     private String accessToken;
     private byte[] model;
     private RequestQueue queue;
+    private Button mExitBtn;
+    private ProgressBar mSpinner;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +77,15 @@ public class Sketchfab extends Activity {
             e.printStackTrace();
         }
         queue = Volley.newRequestQueue(ctx);
+        mExitBtn = (Button) findViewById(R.id.sketchfab_exit);
+        mExitBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        mSpinner = (ProgressBar)findViewById(R.id.progressBar1);
+        mSpinner.setVisibility(View.INVISIBLE);
         mWebView = (WebView) findViewById(R.id.myWebView);
         mWebView.setWebChromeClient(new WebChromeClient() {
 
@@ -98,6 +116,9 @@ public class Sketchfab extends Activity {
                     Log.d("ooori", "code =" + code);
 
                     getToken(code);
+                    mWebView.setVisibility(View.INVISIBLE);
+                    mSpinner.setVisibility(View.VISIBLE);
+                    return false;
                 }
                 else {
                     view.loadUrl(request.getUrl().toString());
@@ -106,7 +127,7 @@ public class Sketchfab extends Activity {
                     Log.d("ooori", "url request =" + request.getUrl().toString());
                     return true;
                 }
-                return false;
+
             }
         });
         mWebView.getSettings().setJavaScriptEnabled(true);
@@ -181,7 +202,21 @@ public class Sketchfab extends Activity {
                     JSONObject result = new JSONObject(resultResponse);
                     String uri = result.getString("uri");
                     String uid = result.getString("uid");
-
+                    AlertDialog.Builder builder;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        builder = new AlertDialog.Builder(ctx, android.R.style.Theme_Material_Dialog_Alert);
+                    } else {
+                        builder = new AlertDialog.Builder(ctx);
+                    }
+                    builder.setTitle("Model uploaded successfully")
+                            .setMessage("")
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    ctx.finish();
+                                }
+                            })
+                            .setIcon(android.R.drawable.ic_dialog_info)
+                            .show();
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -224,6 +259,22 @@ public class Sketchfab extends Activity {
                 }
                 Log.i("Error", errorMessage);
                 error.printStackTrace();
+                AlertDialog.Builder builder;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    builder = new AlertDialog.Builder(ctx, android.R.style.Theme_Material_Dialog_Alert);
+                } else {
+                    builder = new AlertDialog.Builder(ctx);
+                }
+                builder.setTitle("Model Failed to Upload")
+                        .setMessage("")
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                ctx.finish();
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_info)
+                        .show();
+
             }
         }) {
             @Override
@@ -258,5 +309,7 @@ public class Sketchfab extends Activity {
         };
         queue.add(multipartRequest);
     }
+
+
 
 }

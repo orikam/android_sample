@@ -2,14 +2,28 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.blackstars.export">
 
-
-
     <application>
         <activity
             android:name=".Sketchfab"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_sketchfab"
+            android:theme="@style/FullscreenTheme" />
+        <activity
+            android:name=".ExportActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_export"
             android:theme="@style/FullscreenTheme"></activity>
+
+        <provider
+            android:name=".GenericFileProvider"
+            android:authorities="${applicationId}.my.package.name.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"/>
+        </provider>
+
     </application>
 
 </manifest>
