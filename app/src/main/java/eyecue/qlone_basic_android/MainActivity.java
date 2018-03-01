@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.eyecue.inapp.BuyCreditActivity;
+import com.blackstars.export.Sketchfab;
+
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -13,7 +15,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Intent intent = new Intent(this, BuyCreditActivity.class);
+//        Intent intent = new Intent(this, BuyCreditActivity.class);
+        Intent intent = new Intent(this, Sketchfab.class);
         startActivity(intent);
 
     }

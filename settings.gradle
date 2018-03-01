@@ -1,1 +1,1 @@
-include ':app', ':inapp'
+include ':app', ':inapp', ':export'

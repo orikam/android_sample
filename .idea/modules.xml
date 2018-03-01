@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/export/export.iml" filepath="$PROJECT_DIR$/export/export.iml" />
       <module fileurl="file://$PROJECT_DIR$/inapp/inapp.iml" filepath="$PROJECT_DIR$/inapp/inapp.iml" />
       <module fileurl="file://$PROJECT_DIR$/qlone_basic_android.iml" filepath="$PROJECT_DIR$/qlone_basic_android.iml" />
     </modules>

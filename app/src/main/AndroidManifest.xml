@@ -6,6 +6,7 @@
     tools:ignore="HardcodedDebugMode"
 
     <uses-permission android:name="com.android.vending.BILLING" />
+    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
 
     <application
         android:allowBackup="true"
