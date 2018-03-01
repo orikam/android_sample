@@ -8,19 +8,65 @@
     <!-- The primary full-screen view. This can be replaced with whatever view
          is needed to present your content, e.g. VideoView, SurfaceView,
          TextureView, etc. -->
-    <TextView
-        android:id="@+id/fullscreen_content"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:keepScreenOn="true"
-        android:text="@string/dummy_content"
-        android:textColor="#33b5e5"
-        android:textSize="50sp"
-        android:textStyle="bold" />
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#ff0000">
+
+            <Button
+                android:id="@+id/sketchfab_export_btn"
+                style="?metaButtonBarButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Sketchfab" />
+
+            <Button
+                android:id="@+id/obj_export_btn"
+                style="?metaButtonBarButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Obj" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:orientation="vertical"
+            android:background="#00ff00">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/export_sites"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="#ff0000"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/export_files"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="#0000ff"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/export_social"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="#00ff00"/>
+
+        </LinearLayout>
+    </LinearLayout>
 
     <!-- This FrameLayout insets its children based on system windows using
-         android:fitsSystemWindows. -->
+         android:fitsSystemWindows. 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -54,5 +100,5 @@
 
         </LinearLayout>
     </FrameLayout>
-
+    -->
 </FrameLayout>

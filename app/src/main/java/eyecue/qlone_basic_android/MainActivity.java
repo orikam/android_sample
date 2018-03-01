@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import com.blackstars.export.ExportActivity;
 
 
-
 public class MainActivity extends AppCompatActivity {
 
     @Override
