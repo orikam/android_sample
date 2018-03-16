@@ -96,7 +96,7 @@ public class ExportActivity extends Activity {
         mPlatformList = new ArrayList<Item>();
         item = new Item(SKETCHFAB_ID, "sketchfab_logo");
         mPlatformList.add(item);
-        item = new Item("Shapeways", "shapeways");
+        item = new Item(OBJ_ID, "shapeways");
         mPlatformList.add(item);
         item = new Item("cgtrader", "cgtrader");
         mPlatformList.add(item);
@@ -114,7 +114,29 @@ public class ExportActivity extends Activity {
             startActivity(intent);
         }
         else if (target.equals(OBJ_ID)) {
+            File f = new File(ctx.getFilesDir(), "monster.zip");
+            try {
 
+                InputStream is = getAssets().open("model.zip");
+                int size = is.available();
+                byte[] buffer = new byte[size];
+                is.read(buffer);
+                is.close();
+
+
+                FileOutputStream fos = new FileOutputStream(f);
+                fos.write(buffer);
+                fos.close();
+            } catch (Exception e) { throw new RuntimeException(e); }
+
+            Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+            long size = f.length();
+            Log.d("ooOri","file size" + size);
+            Uri modelUri = FileProvider.getUriForFile(ctx,ctx.getApplicationContext().getPackageName() + ".my.package.name.provider", f );
+            sharingIntent.setType("application/zip");
+            sharingIntent.putExtra(Intent.EXTRA_STREAM, modelUri);
+            sharingIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            startActivity(Intent.createChooser(sharingIntent, "Share image using"));
         }
     }
 

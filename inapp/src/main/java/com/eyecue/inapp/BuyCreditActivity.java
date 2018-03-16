@@ -26,6 +26,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.vending.billing.IInAppBillingService;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.drive.Drive;
+import com.google.android.gms.tasks.Task;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,6 +41,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
 
 
 //AppCompatActivity
@@ -52,6 +59,8 @@ public class BuyCreditActivity extends Activity {
     HashMap<String, Item> itemMap = new HashMap<String, Item>();
     Activity ctx;
     public static final int REQUEST_CODE = 1001;
+    private  GoogleSignInClient mGoogleSignInClient;
+    private Task<GoogleSignInAccount> mSignInTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,30 +95,57 @@ public class BuyCreditActivity extends Activity {
         myRecycle.setAdapter(adapter);
         myRecycle.setLayoutManager(MyLayoutManager);
 
+        if (InappBalance.getInstance(this).isLoggedIn() == false) {
+            Intent signInIntent = InappBalance.getInstance(ctx).getSignInIntent();
+            startActivityForResult(signInIntent, 1002);
+        }
+        //google sign in
+//        mGoogleSignInClient = buildGoogleSignInClient();
+//
+//        mSignInTask = getSignInTask();
+//
+//        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+//        startActivityForResult(signInIntent, 1002);
+
+
+//        Intent signInIntent = InappBalance.getInstance(ctx).getSignInIntent();
+//        startActivityForResult(signInIntent, 1002);
+
+
+//        InappBalance.getInstance(this).setValue(100);
 
     }
+
+    private GoogleSignInClient buildGoogleSignInClient() {
+        GoogleSignInOptions signInOptions =
+                new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                        .requestScopes(Drive.SCOPE_FILE)
+                        .build();
+        return GoogleSignIn.getClient(this, signInOptions);
+    }
+
+    private Task<GoogleSignInAccount> getSignInTask() {
+        Intent intent = mGoogleSignInClient.getSignInIntent();
+        return GoogleSignIn.getSignedInAccountFromIntent(intent);
+
+    }
+
 
 //    String itemOrder[] = {"premium_upgrade", "gas", "1credit", "android.test.purchased", "2crdit", "5credit"};
     void initItemList(List<ItemInfo> itemsList)
     {
         ItemInfo item;
 
-        item = new ItemInfo("premium_upgrade", null);
+        item = new ItemInfo("1credit", null, 1);
         itemsList.add(item);
 
-        item = new ItemInfo("gas", null);
+        item = new ItemInfo("android.test.purchased", null, 20);
         itemsList.add(item);
 
-        item = new ItemInfo("1credit", null);
+        item = new ItemInfo("2crdit", null, 2);
         itemsList.add(item);
 
-        item = new ItemInfo("android.test.purchased", null);
-        itemsList.add(item);
-
-        item = new ItemInfo("2crdit", null);
-        itemsList.add(item);
-
-        item = new ItemInfo("5credit", null);
+        item = new ItemInfo("5credit", null, 3);
         itemsList.add(item);
 
 
@@ -130,12 +166,28 @@ public class BuyCreditActivity extends Activity {
                     String token = jo.getString("purchaseToken");
                     Log.d("oooOri", "You have bought the " + sku);
                     consume(token);
+                    ItemInfo item;
+
+                    for (int i = 0; i< itemInfoList.size() ; i++) {
+                        item = itemInfoList.get(i) ;
+                        if( sku.equals(item.ID)) {
+                            InappBalance.getInstance(this).setValue(item.value);
+                        }
+                    }
                 }
                 catch (JSONException e) {
 
                     e.printStackTrace();
                 }
             }
+
+        }
+        if (requestCode == 1002) {
+            // The Task returned from this call is always completed, no need to attach
+            // a listener.
+//            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+//            handleSignInResult(task);
+            InappBalance.getInstance(this).logIn(data);
         }
     }
 
@@ -369,10 +421,12 @@ public class BuyCreditActivity extends Activity {
     public class ItemInfo {
         String ID;
         String imageName;
+        int value;
 
-        public ItemInfo(String id, String image) {
+        public ItemInfo(String id, String image, int value ) {
             ID = id;
             imageName = image;
+            this.value = value;
         }
     }
 

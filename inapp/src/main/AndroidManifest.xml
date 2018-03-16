@@ -9,6 +9,12 @@
             android:label="@string/title_activity_buy_credit"
             android:theme="@style/FullscreenTheme"
             android:screenOrientation="landscape"></activity>
+        <activity
+            android:name=".InappBalance$singletonActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="singleton_activity"
+            android:theme="@style/Animation.AppCompat.Dialog"
+            android:screenOrientation="landscape"></activity>
     </application>
 
 </manifest>
